@@ -1,5 +1,6 @@
 """Generate Markov text from text files."""
 
+import random
 from random import choice
 
 
@@ -10,9 +11,12 @@ def open_and_read_file(file_path):
     the file's contents as one string of text.
     """
 
-    # your code goes here
+    text_file = open(file_path)
+    data = text_file.read().replace('\n', ' ')
+    text_file.close()    
+    # print(data)
 
-    return 'Contents of your file as one long string'
+    return data
 
 
 def make_chains(text_string):
@@ -41,19 +45,57 @@ def make_chains(text_string):
     """
 
     chains = {}
-
-    # your code goes here
+    key = ()    
+    value = []
+    string_list = text_string.split()
+    for i in range(len(string_list)-2):            
+        key = (string_list[i], string_list[i+1])
+                
+        if key in chains:
+            chains[key].append(string_list[i+2])
+        else:
+            chains[key] = [string_list[i+2]]   
+    # print(chains)
+    
 
     return chains
 
+current_key = ()
 
 def make_text(chains):
     """Return text from chains."""
 
     words = []
 
-    # your code goes here
+    # Get a random key as the first link for our text output
+    first_link = random.choice(list(chains.keys()))
+    
+    # words.append(first_link[0]) !!!!
+    
+    # print(first_link)
+    # Add the words in that key to the text output
+    # Pull out a random word from that key's values list
+    # Create a new key using the key[1] and the random word
+    # Check to see if the new key exists in the dictionary
+    # If it does, repeat the process
+    current_key = first_link
 
+    while current_key in chains.keys():
+        # current_key = key
+        
+        # chosen_word = chains[key][0]
+        # chosen_word = key[1]
+        chosen_word = random.choice(chains[current_key])
+
+        # new_key = (current_key[1], chosen_word) 
+        # print("=================>" + str(new_key))
+        words.append(current_key[0])
+        # words.append(chosen_word)
+        current_key = (current_key[1], chosen_word)
+    # print(words)
+    words.append(current_key[0])
+    words.append(current_key[1])
+    
     return ' '.join(words)
 
 
